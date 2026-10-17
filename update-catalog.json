@@ -3,42 +3,42 @@
   "products": [
     {
       "id": "ce213",
-      "label": "Đồng hồ 2.13 inch",
+      "label": "CE 2.13",
       "model": 529,
-      "version": 165,
-      "release": "v20.13.3",
-      "url": "updates/DH_CE_213_v20.13.3_FACE4_SANS36_TEST_OTA165_encrypted.zip",
-      "sha256": "360282b99a880777950138d7a0467161527fdca81d282a8f9ff2f479ea87f460",
+      "version": 185,
+      "release": "CE v20.15.2 MONTH RED TEST",
+      "url": "updates/DH_CE_213_v20.15.2_MONTH_RED_TEST_OTA185_encrypted.zip",
+      "sha256": "07fabdcefb1c7088ec6c4d4c7a786f50d7ba7069c60f90166d185c92fe3028b3",
       "resource_profile": 33
     },
     {
       "id": "noce213",
-      "label": "Đồng hồ 2.13 inch",
+      "label": "no CE 2.13",
       "model": 530,
-      "version": 166,
-      "release": "v19.6.3",
-      "url": "updates/DH_no_CE_213_v19.6.3_FACE4_SANS36_TEST_OTA166_encrypted.zip",
-      "sha256": "967802a4ea182e7e215c06ab7d14c7a5734f5865578530eba8ee7f4722c95266",
+      "version": 186,
+      "release": "no CE v19.7.1 MONTH RED TEST",
+      "url": "updates/DH_no_CE_213_v19.7.1_MONTH_RED_TEST_OTA186_encrypted.zip",
+      "sha256": "15da699f25ed3f3647e3c476fcfde8d5d528665b132271ed9604295cfda7b04e",
       "resource_profile": 33
     },
     {
       "id": "ce290",
-      "label": "Đồng hồ 2.9 inch",
+      "label": "CE 2.9",
       "model": 657,
-      "version": 172,
-      "release": "v19.4.2 CIRCLE BOLD42 TEST",
-      "url": "updates/DH_290_CE_v19.4.2_CIRCLE_BOLD42_TEST_OTA172_encrypted.zip",
-      "sha256": "85657cb82cb0221d0816a0dd0787a6c519952971d680197d8e58569b7ebed70c",
+      "version": 187,
+      "release": "CE v19.5.1 MONTH RED TEST",
+      "url": "updates/DH_290_CE_v19.5.1_MONTH_RED_TEST_OTA187_encrypted.zip",
+      "sha256": "2a5f8a35d7a53c0351249d5dd2e4f341e2a9e18e72e561b7f8f791d9e431d3d3",
       "resource_profile": 41
     },
     {
       "id": "noce290",
-      "label": "Đồng hồ 2.9 inch",
+      "label": "no CE 2.9",
       "model": 658,
-      "version": 173,
-      "release": "v7.4.2 CIRCLE BOLD42 TEST",
-      "url": "updates/DH_290_no_CE_v7.4.2_CIRCLE_BOLD42_TEST_OTA173_encrypted.zip",
-      "sha256": "4cceb98836dd06ce2ff7c4358d8e61169d77ce1c02a155e7e5f0842a2e5a8652",
+      "version": 188,
+      "release": "no CE v7.5.1 MONTH RED TEST",
+      "url": "updates/DH_290_no_CE_v7.5.1_MONTH_RED_TEST_OTA188_encrypted.zip",
+      "sha256": "0eb8bfb6c38bf26bb845431e1290061532d440af54cf3b952ced569e9a8c8210",
       "resource_profile": 41
     }
   ]
