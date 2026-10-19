@@ -10,8 +10,15 @@ Mở trang bằng trình duyệt có hỗ trợ Bluetooth. Kết nối đồng h
 - Bộ đếm ngược: nhập nội dung, chọn ngày rồi bấm Bắt đầu đếm ngược. Số ký tự và chữ tiếng Việt phụ thuộc khả năng của đồng hồ.
 - Album ảnh: chọn ảnh, lưu vào từng ô, chọn cách đổi ảnh và bấm Lưu và bắt đầu. Tắt tự đổi ảnh trước khi tải một ảnh trực tiếp lên màn hình.
 - Đánh dấu ngày tháng, hẹn giờ nghỉ màn hình và đèn chỉ hoạt động trên đồng hồ có hỗ trợ.
+- Danh ngôn: bấm 100 câu có sẵn rồi xác nhận để dùng bộ mặc định. Bấm Câu riêng của tôi để mở ô nhập; mỗi dòng một câu, tối đa 50 câu, rồi Lưu và hiển thị câu riêng một lần. Bỏ thay đổi sẽ không sửa nội dung trên đồng hồ.
+- Kết hợp cả hai chỉ chọn được khi đồng hồ đã có cả bộ mặc định và ít nhất một câu riêng được lưu. Câu mới gõ nhưng chưa lưu không bật được lựa chọn này.
+- Dừng khi đang lưu: web giữ các câu đang nhập. Kết nối lại rồi chọn bộ câu muốn dùng; web tự kết thúc lần truyền dở và dùng bản đã lưu hợp lệ. Không cần vào phần cập nhật để cài lại dữ liệu chỉ vì dừng truyền.
 
 ## Cập nhật và khôi phục
+
+Nếu sau khi thay pin màn hình hiện NO DATA: kết nối đồng hồ, vào Cập nhật phần mềm và bấm Khôi phục đồng hồ. Trang thử đọc lại bộ nhớ trước, không tự xóa dữ liệu. Nếu phần mềm còn cũ, trang sẽ chuẩn bị bản cập nhật phù hợp; hãy hoàn tất cập nhật rồi kết nối lại và bấm Khôi phục đồng hồ.
+
+Nếu tài nguyên không còn hợp lệ, web hỏi trước khi sao lưu và cài lại. Nội dung nằm trong vùng đã hỏng có thể không khôi phục được; ảnh album không bị tự xóa. Nếu vẫn không liên lạc được với bộ nhớ, trang dừng lại và hướng dẫn gửi nhật ký cho nơi bán. Web không sửa được lỗi phần cứng hoặc thiết bị không còn Bluetooth/DFU.
 
 Kết nối rồi bấm Kiểm tra bản cập nhật, hoặc chọn file ZIP được cung cấp đúng cho đồng hồ. Bấm Bắt đầu cập nhật; khi được yêu cầu chọn lại, bấm nút lần nữa và chọn DFUTAG. Giữ đồng hồ ở gần, dùng pin còn đủ điện và không đóng trang trong khi cập nhật.
 
