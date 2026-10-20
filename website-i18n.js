@@ -44,6 +44,9 @@ function apply(lang=current()){
  lang=lang==='en'?'en':'vi';try{localStorage.setItem('app-language',lang);}catch(_){}
  document.documentElement.lang=lang;document.title=translate('E-Paper Tag - Bluetooth Controller',lang);
  const selector=document.getElementById('language-selector');if(selector)selector.value=lang;
+ // Refresh only illustration URLs: choosing a website language never writes to the clock.
+ window.ClockFacePicker?.refreshPreview?.();
+ window.CalendarFacePicker?.refreshPreview?.();
  subtree(document.body,lang);
 }
 function observe(){

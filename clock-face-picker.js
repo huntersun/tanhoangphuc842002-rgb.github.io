@@ -24,7 +24,7 @@ function unavailable(){
  return typeof gattServer==='undefined'||!gattServer?.connected?'Kết nối đồng hồ để xem những giao diện phù hợp.':'Đồng hồ này vẫn dùng nút chuyển giao diện phía trên. Các mẫu chọn trực tiếp chỉ hiện trên phiên bản có hỗ trợ.';
 }
 function blocked(){return !!(window.VNDataBusy?.()||window.EpdDfuBusy?.()||window.EpdAutoUpdate?.busy?.()||window.countdownOperationBusy||(typeof clockImageUploadBusy!=='undefined'&&clockImageUploadBusy));}
-function preview(){const d=device();if(!d)return;const n=Number($('clock-face-select').value),row=availableRows()[n];if(!row)return;$('clock-face-preview').src='face-previews/clock-'+(n+1)+'.png';$('clock-face-preview').alt=label(row)+' — hình minh họa';$('clock-face-description').textContent=row===rows[0]&&label(row)!==row.name?'Giờ lớn với kiểu chữ 3D.':row.description;}
+function preview(){const d=device();if(!d)return;const n=Number($('clock-face-select').value),row=availableRows()[n];if(!row)return;const dir=window.EpdWebsiteI18n?.current()==='en'?'face-previews/en/':'face-previews/';$('clock-face-preview').src=dir+'clock-'+(n+1)+'.png';$('clock-face-preview').alt=label(row)+' — hình minh họa';$('clock-face-description').textContent=row===rows[0]&&label(row)!==row.name?'Giờ lớn với kiểu chữ 3D.':row.description;}
 function refresh(){
  const d=device();$('clock-face-controls').hidden=!d;
  if(!d){$('clock-face-availability').textContent=unavailable();if(versionKey){versionKey='';$('clock-face-status').textContent='';}return;}
@@ -50,5 +50,5 @@ async function apply(){
  finally{busy=false;refresh();}
 }
 $('clock-face-select').addEventListener('change',preview);$('clock-face-apply').addEventListener('click',apply);
-window.ClockFacePicker={refresh,apply,supported:()=>!!device()};refresh();setInterval(refresh,500);
+window.ClockFacePicker={refresh,refreshPreview:preview,apply,supported:()=>!!device()};refresh();setInterval(refresh,500);
 })();

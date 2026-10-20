@@ -15,7 +15,7 @@ function device(){
  return{key:[bleDevice?.id,nrf52PanelProfile,nrf52FirmwareVersion].join('|'),id,big,ch:epdCharacteristic};
 }
 function blocked(){return !!(window.VNDataBusy?.()||window.EpdDfuBusy?.()||window.EpdAutoUpdate?.busy?.()||window.countdownOperationBusy||(typeof clockImageUploadBusy!=='undefined'&&clockImageUploadBusy));}
-function preview(){const d=device(),n=Number($('calendar-face-select').value),row=rows[n];if(!d||!row)return;$('calendar-face-preview').src='face-previews/calendar-'+(n+1)+'.png';$('calendar-face-preview').alt=row.name+' — hình minh họa';$('calendar-face-description').textContent=row.description;}
+function preview(){const d=device(),n=Number($('calendar-face-select').value),row=rows[n];if(!d||!row)return;const dir=window.EpdWebsiteI18n?.current()==='en'?'face-previews/en/':'face-previews/';$('calendar-face-preview').src=dir+'calendar-'+(n+1)+'.png';$('calendar-face-preview').alt=row.name+' — hình minh họa';$('calendar-face-description').textContent=row.description;}
 function refresh(){
  const d=device();$('calendar-face-controls').hidden=!d;
  if(!d){$('calendar-face-availability').textContent=typeof gattServer==='undefined'||!gattServer?.connected?'Kết nối đồng hồ để xem những giao diện lịch phù hợp.':'Đồng hồ này vẫn dùng nút Chuyển sang chế độ lịch phía trên. Cập nhật phần mềm có hỗ trợ để chọn trực tiếp.';versionKey='';return;}
@@ -36,5 +36,5 @@ async function apply(){
  finally{busy=false;refresh();}
 }
 $('calendar-face-select').addEventListener('change',preview);$('calendar-face-apply').addEventListener('click',apply);
-window.CalendarFacePicker={refresh,apply,supported:()=>!!device()};refresh();setInterval(refresh,500);
+window.CalendarFacePicker={refresh,refreshPreview:preview,apply,supported:()=>!!device()};refresh();setInterval(refresh,500);
 })();
