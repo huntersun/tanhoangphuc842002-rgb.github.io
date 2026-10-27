@@ -3,42 +3,42 @@
   "products": [
     {
       "id": "ce213",
-      "label": "CE 2.13",
+      "label": "CE 2.13 v20.28.1",
       "model": 529,
-      "version": 242,
-      "release": "CE v20.24 BATTERY CLOCK IMAGE ALBUM",
-      "url": "updates/DH_CE_213_v20.24_BATTERY_CLOCK_IMAGE_ALBUM_OTA242_encrypted.zip",
-      "sha256": "41b3b885e9b54af3f3e0c7c168c2d58a28900aaee74d327d4904cb975475e2ab",
+      "version": 258,
+      "release": "v20.28.1",
+      "url": "updates/DH_CE_213_v20.28.1_ART_HOLD_FIX_OTA258_encrypted.zip",
+      "sha256": "a525e16539dba5ce46a4765346d2a68b89f51c86cf2d2d6e536168d576ae6294",
       "resource_profile": 33
     },
     {
       "id": "noce213",
-      "label": "no CE 2.13",
+      "label": "no CE 2.13 v19.20.1",
       "model": 530,
-      "version": 243,
-      "release": "no CE v19.16 BATTERY CLOCK IMAGE ALBUM",
-      "url": "updates/DH_no_CE_213_v19.16_BATTERY_CLOCK_IMAGE_ALBUM_OTA243_encrypted.zip",
-      "sha256": "3abaeaeaa440d52f5ad2b09d9c47f8c8c05d79fbc5f8f0b593b42310cc84ac5b",
+      "version": 259,
+      "release": "v19.20.1",
+      "url": "updates/DH_no_CE_213_v19.20.1_ART_HOLD_FIX_OTA259_encrypted.zip",
+      "sha256": "2620cdf80d79134282be2b4f90b691361f6dcfb1d67130b770f669ba3b489e27",
       "resource_profile": 33
     },
     {
       "id": "ce290",
-      "label": "CE 2.9",
+      "label": "CE 2.9 v19.18.1",
       "model": 657,
-      "version": 244,
-      "release": "CE v19.14 BATTERY CLOCK IMAGE ALBUM",
-      "url": "updates/DH_290_CE_v19.14_BATTERY_CLOCK_IMAGE_ALBUM_OTA244_encrypted.zip",
-      "sha256": "30bf9f42b0d68181aa543c084ac3e6c3516a074857e99f40a6f897baff80e48c",
+      "version": 258,
+      "release": "v19.18.1",
+      "url": "updates/DH_290_CE_v19.18.1_ART_HOLD_FIX_OTA258_encrypted.zip",
+      "sha256": "b75f2057ad0f1c69bbf6ee99427e7914aaa67030d64d7f170f23e707bdd81b35",
       "resource_profile": 41
     },
     {
       "id": "noce290",
-      "label": "no CE 2.9",
+      "label": "no CE 2.9 v7.19.1",
       "model": 658,
-      "version": 245,
-      "release": "no CE v7.15 BATTERY CLOCK IMAGE ALBUM",
-      "url": "updates/DH_290_no_CE_v7.15_BATTERY_CLOCK_IMAGE_ALBUM_OTA245_encrypted.zip",
-      "sha256": "37267fbfe4afb541faccb6f35e73da545b2d9999a2f813b11c5668a3ab5a0062",
+      "version": 259,
+      "release": "v7.19.1",
+      "url": "updates/DH_290_no_CE_v7.19.1_ART_HOLD_FIX_OTA259_encrypted.zip",
+      "sha256": "b48d0814f9126e07de5ee84f254294bcd1754ca23e3bb737773bbf994b8d3b9c",
       "resource_profile": 41
     }
   ]
