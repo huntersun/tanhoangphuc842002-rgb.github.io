@@ -53,12 +53,13 @@
   // Shared photo actions own this lock, including the ordinary upload button.
   if(active)$('clock-image-upload-button').disabled=locked||!clockImageOriginal;
   if(active&&movable()&&!positionRead&&!locked&&root.SmallClockAlbum){positionRead=true;setTimeout(()=>{if(deviceKey===key&&!busy())root.SmallClockAlbum.loadPosition();},0);}
+  root.ArtClockName?.controls(locked);
  }
  async function ready(){
   if(!selected())return;
   if(!await T.facesReady({readiness:true}))throw Error(wording('Vào Cài đặt đồng hồ và bấm Cài đặt / cập nhật dữ liệu trước khi dùng Đồng hồ tranh.','Open Settings and install/update clock data before using Art clock.'));
  }
- root.renderClockImage=function(){originalRender();if(selected()&&full()&&clockImageOriginal){const box=corner(),ctx=$('clock-image-canvas').getContext('2d');ctx.fillStyle='white';ctx.fillRect(box.x,box.y,box.width,box.height);}};
+ root.renderClockImage=function(){originalRender();if(selected()&&full()&&clockImageOriginal){const box=corner(),ctx=$('clock-image-canvas').getContext('2d');root.ArtClockName?.draw(ctx);ctx.fillStyle='white';ctx.fillRect(box.x,box.y,box.width,box.height);}};
  // Store all artwork pixels on movable-clock firmware. Only the preview is
  // masked; the device paints its box and can restore the previous corner.
  function rawCanvas(){if(!movable()||!selected())return $('clock-image-canvas');originalRender();const copy=document.createElement('canvas'),src=$('clock-image-canvas');copy.width=src.width;copy.height=src.height;copy.getContext('2d').drawImage(src,0,0);root.renderClockImage();return copy;}
