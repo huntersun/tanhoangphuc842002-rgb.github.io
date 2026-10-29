@@ -3454,9 +3454,24 @@ document.querySelectorAll('.tab-button[data-tab]').forEach(function(btn) {
             if (selector) selector.value = String(pending);
             await sendNrf52WeekStart(true);
         }
+        function nrf52NativeFaceSelectionSupported() {
+            if (!nrf52ModelDetected || nrf52ModelId !== 2) return false;
+            const recent = nrf52PanelProfile === 0x21
+                ? [266,268,270,272,274,276,278,279,282].includes(nrf52FirmwareVersion)
+                : nrf52PanelProfile === 0x29 && [280,281,283,284].includes(nrf52FirmwareVersion);
+            return recent || (([141,142,143,144,149,150,151,152,153,154,155,156,159,160,161,162,163,164,165,166,174,175,178,179,180,181,182,185,186,189,190,193,194,197,198,199,200,203,204,205,206,209,210,213,214,217,218,219,220,223,224,227,228,229,232,233,236,237,242,243,246,247,250,251,254,255,256,257,258,259,260,261,262,263,264].includes(nrf52FirmwareVersion) && nrf52PanelProfile === 0x21) || ([145,146,147,148,157,158,167,168,170,171,172,173,176,177,183,184,187,188,191,192,195,196,207,208,211,212,215,216,221,222,225,226,230,231,234,235,238,239,244,241,245,248,249,252,253,254,255,256,257,258,259,260,261,262,263,264].includes(nrf52FirmwareVersion) && nrf52PanelProfile === 0x29));
+        }
+        function nrf52RecentClockCycle() {
+            if (nrf52PanelProfile === 0x21) {
+                if ([270,272,274,276,278,279,282].includes(nrf52FirmwareVersion)) return [2,3,4,5,10,12,13];
+                if ([266,268].includes(nrf52FirmwareVersion)) return [2,3,4,5,10,12];
+            }
+            if (nrf52PanelProfile === 0x29 && [280,281,283,284].includes(nrf52FirmwareVersion)) return [2,3,4,10,11,13,7];
+            return null;
+        }
         async function sendNrf52Mode(mode) {
             const previousMode = nrf52DisplayMode;
-            const nativeCalendar = ([141,142,143,144,149,150,151,152,153,154,155,156,159,160,161,162,163,164,165,166,174,175,178,179,180,181,182,185,186,189,190,193,194,197,198,199,200,203,204,205,206,209,210,213,214,217,218,219,220,223,224,227,228,229,232,233,236,237,242,243,246,247,250,251,254,255,256,257,258,259,260,261,262,263,264].includes(nrf52FirmwareVersion) && nrf52PanelProfile === 0x21) || ([145,146,147,148,157,158,167,168,170,171,172,173,176,177,183,184,187,188,191,192,195,196,207,208,211,212,215,216,221,222,225,226,230,231,234,235,238,239,244,241,245,248,249,252,253,254,255,256,257,258,259,260,261,262,263,264].includes(nrf52FirmwareVersion) && nrf52PanelProfile === 0x29);
+            const nativeCalendar = nrf52NativeFaceSelectionSupported();
             const actualMode = mode & (nativeCalendar ? 0x3f : 0x7f);
             // Save the calendar layout before SET_TIME triggers a redraw. The
             // firmware writes flash only when the value actually changes.
@@ -3473,7 +3488,10 @@ document.querySelectorAll('.tab-button[data-tab]').forEach(function(btn) {
                 mode
             ]);
             await sendCommand(packet);
-            nrf52DisplayMode = nativeCalendar && actualMode === 1 && !(mode & 0x40)
+            const recentCycle = nrf52RecentClockCycle();
+            if (nativeCalendar && (mode & 0x40)) nrf52DisplayMode = actualMode;
+            else if (recentCycle && actualMode === 2) nrf52DisplayMode = recentCycle[(recentCycle.indexOf(previousMode) + 1) % recentCycle.length];
+            else nrf52DisplayMode = nativeCalendar && actualMode === 1 && !(mode & 0x40)
                 ? (previousMode === 1 ? 9 : previousMode === 9 ? (nrf52PanelProfile === 0x29 ? 5 : 7) : 1)
                 : actualMode === 2 && ((nrf52PanelProfile === 0x21 && [209,210,213,214,217,218,219,220,223,224,227,228,229,232,233,236,237,242,243,246,247,250,251,254,255,256,257,258,259,260,261,262,263,264].includes(nrf52FirmwareVersion)) || (nrf52PanelProfile === 0x29 && [211,212,215,216,221,222,225,226,230,231,234,235,238,239,244,241,245,248,249,252,253,254,255,256,257,258,259,260,261,262,263,264].includes(nrf52FirmwareVersion)))
                     ? ((mode & 0x40) ? 2 : ((nrf52PanelProfile === 0x29 ? [2,3,4,10,11,12,13,2] : [2,3,4,5,10,11,12,2])[(nrf52PanelProfile === 0x29 ? [2,3,4,10,11,12,13] : [2,3,4,5,10,11,12]).indexOf(previousMode)+1] || 2))
@@ -4631,8 +4649,11 @@ document.querySelectorAll('.tab-button[data-tab]').forEach(function(btn) {
         async function setTime() {
             if (window.countdownOperationBusy) return;
             if (deviceProtocol === PROTOCOL_NRF52) {
-                const keepCalendar = ([141,142,143,144,149,150,151,152,153,154,155,156,159,160,161,162,163,164,165,166,174,175,178,179,180,181,182,185,186,189,190,193,194,197,198,199,200,203,204,205,206,209,210,213,214,217,218,219,220,223,224,227,228,229,232,233,236,237,242,243,246,247,250,251,254,255,256,257,258,259,260,261,262,263,264].includes(nrf52FirmwareVersion) && nrf52PanelProfile === 0x21 && [1,7,9].includes(nrf52DisplayMode)) || ([145,146,147,148,157,158,167,168,170,171,172,173,176,177,183,184,187,188,191,192,195,196,207,208,211,212,215,216,221,222,225,226,230,231,234,235,238,239,244,241,245,248,249,252,253,254,255,256,257,258,259,260,261,262,263,264].includes(nrf52FirmwareVersion) && nrf52PanelProfile === 0x29 && [1,5,9].includes(nrf52DisplayMode));
-                await sendNrf52Mode(nrf52DisplayMode | (keepCalendar ? 0x40 : 0));
+                // Modes 1 and 2 mean "next face" without the explicit-selection flag.
+                const preserveFace = nrf52NativeFaceSelectionSupported() &&
+                    ([1,9,nrf52PanelProfile === 0x29 ? 5 : 7].includes(nrf52DisplayMode) ||
+                     (nrf52DisplayMode === 2 && (nrf52RecentClockCycle() || window.ClockFacePicker?.supported?.())));
+                await sendNrf52Mode(nrf52DisplayMode | (preserveFace ? 0x40 : 0));
                 return;
             }
             const { unixNow, localeTimeString, year, month, day, week } = getUnixTime();
