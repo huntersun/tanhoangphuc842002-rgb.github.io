@@ -1,4 +1,6 @@
 window.EpdWebsiteEnglish=Object.assign(window.EpdWebsiteEnglish||{},{
+"Đồng hồ dọc":"Portrait clock",
+"Dựng đồng hồ theo chiều dọc. Giờ đỏ ở trên, phút đen ở dưới; thứ và ngày tháng ở cuối màn.":"Stand the clock upright. Red hours above black minutes, with the weekday and date at the bottom.",
 "Tên riêng trên tranh":"Personal text on art",
 "Tên hoặc lời nhắn":"Name or short message",
 "Vị trí chữ":"Text position",
