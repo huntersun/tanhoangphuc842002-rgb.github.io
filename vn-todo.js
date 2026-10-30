@@ -237,28 +237,18 @@ async function install(force=false){
  if(cap[8])throw Error('Lần cài trước chưa hoàn tất. Hãy kết nối lại rồi mở Trợ giúp cài đặt → Thử lại lần cài bị ngắt.');
  if(!force&&cap[7]&&await fontMatches()){if(noDataSetup())await request(10);setupStatus('Dữ liệu đã sẵn sàng. Không cần cài lại; đồng hồ có thể sử dụng ngay.');return;}
  let existing=null;if(cap[7]){const base=new DataView(cap.buffer,cap.byteOffset).getUint32(10,true);existing=await read(base+16,512);}
- const installKey=deviceKey();let blank=false;
+ const installKey=deviceKey(),installedBase=cap[7]?bankAddress():null;let blank=false;
  if(noDataSetup()&&!cap[7]){
   setupStatus('Đang kiểm tra vùng cài dữ liệu…');
   const r=await request(11);if(r.length!==7||r[6]>1)throw Error('Không xác nhận được vùng cài dữ liệu.');blank=r[6]===1;
-  if(blank)setupStatus('Vùng dữ liệu đang trống. Có thể cài trực tiếp, không cần đọc sao lưu toàn bộ đồng hồ.');
+  if(blank)setupStatus('Vùng dữ liệu đang trống. Đang chuẩn bị cài đặt đồng hồ.');
  }
- if(!blank&&backupDevice!==deviceKey()){
-  if(!backup||backup.key!==deviceKey()){
-   if(!confirm('Web sẽ đọc bản sao lưu 512 KB trước, chưa ghi dữ liệu. Giữ kết nối và chờ tải file xong. Tiếp tục?'))return;
-   await makeBackup();
-  } else download(backup.bytes,backup.name);
-  if(!confirm('Bạn đã thấy và lưu file '+backup.name+' (512 KB) trên máy chưa? Chọn OK chỉ khi đã lưu được. Nếu chưa có file, chọn Hủy rồi bấm Cài đặt đồng hồ lần nữa để tải lại bản sao lưu.')){
-   setupStatus('Đã dừng trước khi ghi. Bấm Cài đặt đồng hồ lần nữa để tải lại bản sao lưu và tiếp tục.');return;
-  }
-  backupDevice=deviceKey();
- }
- if(!confirm('Cài dữ liệu cho đồng hồ đang kết nối? Hãy giữ bản sao lưu và không tháo pin cho đến khi hoàn tất.')){setupStatus('Đã hủy; chưa ghi dữ liệu.');return;}
  await probe();
  if(installKey!==deviceKey())throw Error('Thiết bị đã thay đổi. Kết nối lại đúng đồng hồ rồi cài dữ liệu.');
  if(!force&&cap[7]&&await fontMatches()){if(noDataSetup())await request(10);setupStatus('Dữ liệu đã sẵn sàng. Không cần cài lại.');return;}
- if(blank){const r=await request(11);if(r.length!==7||r[6]!==1)throw Error('Vùng dữ liệu đã thay đổi. Bấm cài lại để sao lưu trước khi ghi.');}
- else if(backupDevice!==deviceKey())throw Error('Thiết bị đã thay đổi. Cần sao lưu đúng đồng hồ trước khi cài.');
+ if(existing){if(!cap[7]||bankAddress()!==installedBase||crc32(await read(installedBase+16,512))!==crc32(existing))throw Error('Dữ liệu đã thay đổi. Chưa ghi dữ liệu mới.');}
+ else if(cap[7])throw Error('Đồng hồ đã có dữ liệu mới. Bấm cài đặt lại để kiểm tra trước.');
+ if(blank){const r=await request(11);if(r.length!==7||r[6]!==1)throw Error('Vùng dữ liệu đã thay đổi. Chưa ghi dữ liệu mới.');}
  const bytes=Uint8Array.from(defaultBytes);if(existing)bytes.set(existing);
  const installStarted=Date.now();
  setupStatus('Đang cài đặt đồng hồ. Không tháo pin hoặc dùng mục khác.');
@@ -461,16 +451,11 @@ async function installUnified(force=false){
  if(cap[7]){
   base=bankAddress();header=await read(base,16);const v=new DataView(header.buffer),size=v.getUint32(8,true);
   if(v.getUint32(0,true)!==0x31544e56||size<544||size>([213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,242,243,244,241,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,266,268,270,272,274,276,278,279,280,281,282,283,284,285,286,287,288].includes(nrf52FirmwareVersion)?65520:61440))throw Error('Dữ liệu cũ chưa hợp lệ. Chưa ghi dữ liệu mới.');
-  setupStatus('Đang sao lưu nội dung hiện có. Ảnh trong album không bị thay đổi.');old=await read(base+16,size);
+  setupStatus('Đang giữ lại nội dung cá nhân trên đồng hồ…');old=await read(base+16,size);
   if(crc32(old)!==v.getUint32(12,true)||deviceKey()!==key)throw Error('Chưa kiểm tra được dữ liệu cũ. Chưa ghi dữ liệu mới.');
-  const saved=new Uint8Array(16+size);saved.set(header);saved.set(old,16);const name='dong-ho-sao-luu-'+Date.now()+'.bin';download(saved,name);
-  if(!confirm('Đã tải bản sao lưu '+name+'. Hãy giữ file này. Tiếp tục cập nhật dữ liệu đồng hồ? Nội dung cá nhân và ảnh đã lưu được giữ nguyên.')){setupStatus('Đã hủy, dữ liệu đồng hồ chưa thay đổi.');return;}
  }else{
   const r=await request(11);if(r.length!==7||r[6]>1)throw Error('Chưa xác nhận được vùng cài đặt.');blank=r[6]===1;
-  if(!blank){
-   if(!confirm('Bộ dữ liệu hiện có chưa đọc được. Web sẽ sao lưu toàn bộ bộ nhớ trước khi cài lại tài nguyên. Nội dung trong vùng dữ liệu hỏng có thể không khôi phục được; ảnh album không bị xóa. Tiếp tục?'))return;
-   await makeBackup();if(!confirm('Bạn đã lưu file '+backup.name+' trên máy chưa? Chỉ tiếp tục khi đã giữ được bản sao lưu.')){setupStatus('Đã dừng trước khi ghi dữ liệu.');return;}
-  }else if(!confirm('Cài đặt dữ liệu cho đồng hồ? Giữ kết nối và không tháo pin cho đến khi hoàn tất.'))return;
+
  }
  await probe();if(key!==deviceKey()||cap[8])throw Error('Kết nối hoặc trạng thái đã thay đổi. Hãy kiểm tra rồi thử lại.');
  if(old){if(!cap[7]||bankAddress()!==base||crc32(await read(base,16))!==crc32(header))throw Error('Dữ liệu đã thay đổi. Chưa ghi bản mới.');bytes.set(old.subarray(0,512));if(window.DailyQuotes?.supported())bytes=window.DailyQuotes.rebase(bytes,old);const tail=marksTail(old);if(tail){const merged=new Uint8Array(bytes.length+256);merged.set(bytes);merged.set(tail,bytes.length);bytes=merged;}}
