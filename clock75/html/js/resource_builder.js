@@ -159,6 +159,14 @@
   }
   function timeFontGeometry(bytes,index=0) {
     if(!(bytes instanceof Uint8Array)||bytes.length<148)fail('Bộ số giờ chưa đầy đủ');
+    if(index===4){
+      const first=148+view(bytes).getUint32(8,true);
+      if(bytes.length>first){
+        const h=bytes.subarray(first,first+8),n=h.length===8?view(h).getUint32(4,true):0;
+        if(![68,66,80,49].every((v,i)=>h[i]===v)||n<3860||bytes.length!==first+8+n||![80,72,84,50,1,0,32,3,224,1,2,0,0,0,0,0].every((v,i)=>bytes[first+8+i]===v))fail('Dữ liệu đồng hồ tổng hợp chưa đầy đủ');
+        bytes=bytes.slice(0,first);
+      }
+    }
     const v=view(bytes),signed=n=>n>127?n-256:n;
     if(v.getUint32(0,true)!==0x31474654||bytes[4]!==1||bytes[5]!==11||bytes[6]!==48||bytes[7]||v.getUint32(12,true)||v.getUint32(8,true)!==bytes.length-148)fail('Bộ số giờ không hợp lệ');
     let next=0,advance=0,top=127,bottom=-128,span=0;
@@ -255,12 +263,14 @@
     const count = v.getUint16(6, true);
     let end = 8 + count * 16;
     if (bytes.length < end) fail('字体目录不完整');
+    const records=[];
     const fonts = Array.from({ length: count }, (_, slot) => {
       const at = 8 + slot * 16, offset = v.getUint32(at, true), length = v.getUint32(at + 4, true);
       const key = v.getUint32(at + 12, true);
-      if (offset < end || !length || offset + length > bytes.length || (slot === 3 ? !key : key)) fail('字体目录越界或重叠');
-      end = offset + length;
-      const font = bytes.slice(offset, end);
+      const crc=v.getUint32(at+8,true),alias=records.some(r=>r.offset===offset&&r.length===length&&r.crc===crc);
+      if ((offset<end&&!alias)||!length||offset+length>bytes.length||(slot===3?!key:key))fail('字体目录越界或重叠');
+      records.push({offset,length,crc});end=Math.max(end,offset+length);
+      const font=bytes.slice(offset,offset+length);
       if (store.crc32(font) !== v.getUint32(at + 8, true)) fail('字体 CRC 错误');
       validateFont(font, slot); return font;
     });
@@ -285,14 +295,17 @@
     const directorySize = 8 + fonts.length * 16;
     if(fonts.rounded)timeFontGeometry(fonts.rounded,3);
     if(fonts.digital){if(!fonts.rounded)fail("Thiếu bộ số nền");timeFontGeometry(fonts.digital,4);}
-    const baseSize=directorySize+fonts.reduce((n,b)=>n+b.length,0);
+    const dedup=fonts.digital&&[68,66,80,49].every((n,i)=>fonts.digital[148+view(fonts.digital).getUint32(8,true)+i]===n);
+    const aliases=fonts.map((b,i)=>dedup?fonts.findIndex((a,j)=>j<i&&a.length===b.length&&a.every((v,k)=>v===b[k])):-1);
+    const baseSize=directorySize+fonts.reduce((n,b,i)=>n+(aliases[i]<0?b.length:0),0);
     const digitalSize=fonts.digital?fonts.digital.length+12:0;
     const bytes = new Uint8Array(baseSize+digitalSize+(fonts.rounded?fonts.rounded.length+12:0)), v = view(bytes);
     v.setUint32(0, 0x314b5046, true); v.setUint16(4, 1, true); v.setUint16(6, fonts.length, true);
     let offset = directorySize;
     fonts.forEach((b, i) => {
-      [offset, b.length, store.crc32(b), i === 3 ? fonts.customKey : 0].forEach((n, j) => v.setUint32(8 + i * 16 + j * 4, n, true));
-      bytes.set(b, offset); offset += b.length;
+      const at=aliases[i]<0?offset:v.getUint32(8+aliases[i]*16,true);
+      [at,b.length,store.crc32(b),i===3?fonts.customKey:0].forEach((n,j)=>v.setUint32(8+i*16+j*4,n,true));
+      if(aliases[i]<0){bytes.set(b,offset);offset+=b.length;}
     });
     if(fonts.digital){bytes.set(fonts.digital,baseSize);const f=baseSize+fonts.digital.length;v.setUint32(f,0x31544744,true);v.setUint32(f+4,baseSize,true);v.setUint32(f+8,fonts.digital.length,true);}
     if(fonts.rounded){const at=baseSize+digitalSize;bytes.set(fonts.rounded,at);v.setUint32(bytes.length-12,0x31444e52,true);v.setUint32(bytes.length-8,at,true);v.setUint32(bytes.length-4,fonts.rounded.length,true);}

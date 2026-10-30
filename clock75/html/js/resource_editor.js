@@ -108,7 +108,7 @@
     try {
       const family = $('resourceVietnameseFamily')?.value || 'times';
       const key = family === 'arial' ? 'arial' : 'times';
-      let project = root.EPDVietnameseProjects?.[key];
+      let project = (typeof appVersion!=='undefined'&&appVersion>=0x5F?root.EPDDashboardProjects:root.EPDVietnameseProjects)?.[key];
       if (!project) {
         const response = await fetch(`resources/${key}-project.json`, { cache: 'no-store' });
         if (!response.ok) throw new Error('Không đọc được bộ cài đồng hồ. Hãy mở lại trang web đầy đủ.');

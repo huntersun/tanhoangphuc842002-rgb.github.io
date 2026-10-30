@@ -134,7 +134,7 @@
  }
  const api={asset,unpack,replacement,replace,layout,plan,ensure,readSelection,saveSelection};if(node){module.exports=api;return;}
  const $=id=>document.getElementById(id);let busy=false;
- const supported=()=>typeof appVersion!=='undefined'&&[0x4C,0x4D,0x4E,0x4F,0x50,0x51,0x52,0x53,0x54,0x55,0x56,0x57,0x58,0x59,0x5A,0x5B,0x5C,0x5D,0x5E].includes(appVersion)&&typeof gattServer!=='undefined'&&!!gattServer?.connected;
+ const supported=()=>typeof appVersion!=='undefined'&&[0x4C,0x4D,0x4E,0x4F,0x50,0x51,0x52,0x53,0x54,0x55,0x56,0x57,0x58,0x59,0x5A,0x5B,0x5C,0x5D,0x5E,0x5F,0x60].includes(appVersion)&&typeof gattServer!=='undefined'&&!!gattServer?.connected;
  function controls(force=false){for(const id of ['season75Mode','season75Install'])$(id).disabled=force||busy||!supported()||!!root.DeviceOperations?.current;for(const id of ['season75Choice','season75Apply','season75Read'])$(id).disabled=force||busy||!supported()||typeof appVersion==='undefined'||appVersion<0x50||!!root.DeviceOperations?.current;$('season75Stop').disabled=!busy;root.SeasonUpload75?.controls(force||busy||!!root.DeviceOperations?.current,!supported());}
  function say(text){$('season75Status').textContent=text;root.addLog?.('Đồng hồ bốn mùa: '+text);}
  function png(image,width){
@@ -162,7 +162,7 @@
    if(!ok){say('Đã hủy. Album cũ chưa bị thay đổi.');return;}
    $('season75Progress').value=1;
    if(openAfter&&!await root.sendTimeCommand(11,'Đồng hồ bốn mùa'))throw Error('Đã lưu ảnh nhưng chưa mở được đồng hồ. Hãy kết nối lại rồi chọn Đồng hồ bốn mùa.');
-   say('Đã mở đồng hồ bốn mùa. Ảnh riêng đã lưu được giữ nguyên. Bạn có thể tự động đổi theo tiết khí hoặc giữ một mùa yêu thích.');
+   say(openAfter?'Đã mở đồng hồ bốn mùa. Ảnh riêng đã lưu được giữ nguyên. Bạn có thể tự động đổi theo tiết khí hoặc giữ một mùa yêu thích.':'Đã chuẩn bị bộ ảnh bốn mùa. Ảnh riêng đã lưu được giữ nguyên.');return true;
   }catch(e){say('Chưa hoàn tất: '+e.message);root.ConsoleUI?.openLog();}
   finally{busy=false;controls();}
  }
