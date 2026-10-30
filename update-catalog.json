@@ -3,42 +3,42 @@
   "products": [
     {
       "id": "ce213",
-      "label": "CE 2.13 v20.39",
+      "label": "CE 2.13 v20.40",
       "model": 529,
-      "version": 282,
-      "release": "v20.39",
-      "url": "updates/DH_CE_213_v20.39_PORTRAIT_CALENDAR_COLORS_OTA282_encrypted.zip",
-      "sha256": "8a89bb440e5d97a65818efaf261b130682589b49344271ff43c68bfe0b653298",
+      "version": 285,
+      "release": "v20.40",
+      "url": "updates/DH_CE_213_v20.40_PORTRAIT_BOLD_DAY_OTA285_encrypted.zip",
+      "sha256": "f70fc4dfd3845a2edb5328d218f96d91e20d4d783195ab5892095bc4c4cb1d0c",
       "resource_profile": 33
     },
     {
       "id": "noce213",
-      "label": "no CE 2.13 v19.23",
+      "label": "no CE 2.13 v19.24",
       "model": 530,
-      "version": 279,
-      "release": "v19.23",
-      "url": "updates/DH_no_CE_213_v19.23_PORTRAIT_CALENDAR_OTA279_encrypted.zip",
-      "sha256": "680bc8057d13b6abed65c18941a387e5517153838d4f7a65a397c1f8f79caef8",
+      "version": 286,
+      "release": "v19.24",
+      "url": "updates/DH_no_CE_213_v19.24_PORTRAIT_BOLD_DAY_OTA286_encrypted.zip",
+      "sha256": "32e60ebcf745fb97c0aee292d59cfc3b27857930f3b19d97b3fa874c4da6139f",
       "resource_profile": 33
     },
     {
       "id": "ce290",
-      "label": "CE 2.9 v19.22",
+      "label": "CE 2.9 v19.23",
       "model": 657,
-      "version": 283,
-      "release": "v19.22",
-      "url": "updates/DH_290_CE_v19.22_PORTRAIT_FRAME_WIDER_OTA283_encrypted.zip",
-      "sha256": "474bb4d5b18617c8b684b709cb1045da811dc0c6390a29b580fc4e7e201d5fad",
+      "version": 287,
+      "release": "v19.23",
+      "url": "updates/DH_290_CE_v19.23_PORTRAIT_BOLD_DAY_OTA287_encrypted.zip",
+      "sha256": "05d87f7c242335e897ca91f5fcc6b23667417e37502aec7ac7d7b15b16c8b36e",
       "resource_profile": 41
     },
     {
       "id": "noce290",
-      "label": "no CE 2.9 v7.23",
+      "label": "no CE 2.9 v7.24",
       "model": 658,
-      "version": 284,
-      "release": "v7.23",
-      "url": "updates/DH_290_no_CE_v7.23_PORTRAIT_FRAME_WIDER_OTA284_encrypted.zip",
-      "sha256": "85c34476148f4478ecca97fa346128d24a6e6ca52167b0469ce6e843e252a9c6",
+      "version": 288,
+      "release": "v7.24",
+      "url": "updates/DH_290_no_CE_v7.24_PORTRAIT_BOLD_DAY_OTA288_encrypted.zip",
+      "sha256": "6f2a8e1f8b486ce643acb47716687e0e05223e0345a94db55a6acd270ba63f14",
       "resource_profile": 41
     }
   ]

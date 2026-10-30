@@ -24,10 +24,10 @@
   const ver=one(init,1),descriptor=one(init,100),hash=proto(one(init,8));
   if(descriptor.length!==20||new TextDecoder().decode(descriptor.slice(0,4))!=='DHE1')throw new Error('Gói cập nhật không đúng định dạng được hỗ trợ.');
   const view=new DataView(descriptor.buffer,descriptor.byteOffset,descriptor.byteLength);
-  if(![0x0211,0x0212,0x0291,0x0292,0x0751].includes(meta.model_id)||view.getUint16(4,true)!==meta.model_id||view.getUint16(6,true)!==1||meta.key_id!==1||ver!==meta.application_version||one(init,7)!==image.imageData.byteLength||one(hash,1)!==3||one(hash,2).length!==32)throw new Error('Thông tin model/phiên bản của gói không khớp.');
+  if(![0x0211,0x0212,0x0291,0x0292,0x0751,0x0752].includes(meta.model_id)||view.getUint16(4,true)!==meta.model_id||view.getUint16(6,true)!==1||meta.key_id!==1||ver!==meta.application_version||one(init,7)!==image.imageData.byteLength||one(hash,1)!==3||one(hash,2).length!==32)throw new Error('Thông tin model/phiên bản của gói không khớp.');
   const sig=one(signed,3);if(sig.length!==64)throw new Error('Chữ ký cập nhật không hợp lệ.');
   const big=new Uint8Array(64);big.set(sig.slice(0,32).reverse());big.set(sig.slice(32).reverse(),32);
-  const key=await crypto.subtle.importKey('jwk',meta.model_id===0x0751?original75PublicKey:publicKey,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);
+  const key=await crypto.subtle.importKey('jwk',[0x0751,0x0752].includes(meta.model_id)?original75PublicKey:publicKey,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);
   if(!await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},key,big,raw))throw new Error('Chữ ký cập nhật không đúng. Đã dừng trước khi chuyển đồng hồ sang DFU.');
   const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',image.imageData)),hex=[...digest].map(v=>v.toString(16).padStart(2,'0')).join('');
   if(hex!==meta.ciphertext_sha256)throw new Error('File cập nhật bị thay đổi hoặc tải thiếu.');
